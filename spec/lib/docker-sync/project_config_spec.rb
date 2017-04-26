@@ -1,6 +1,9 @@
 require 'docker-sync/config/project_config'
 
 describe DockerSync::ProjectConfig do
+  let(:default_sync_strategy) { OS.linux? ? 'native' : 'unison' }
+  let(:default_watch_strategy) { OS.linux? ? 'dummy' : 'unison' }
+
   subject { described_class.new }
 
   describe '#initialize' do
@@ -13,8 +16,8 @@ describe DockerSync::ProjectConfig do
               'simplest-sync' => {
                 'src' => './app',
                 'dest' => '/var/www',
-                'sync_strategy' => 'unison',
-                'watch_strategy' => 'unison'
+                'sync_strategy' => default_sync_strategy,
+                'watch_strategy' => default_watch_strategy
               }
             }
           })
@@ -72,7 +75,7 @@ describe DockerSync::ProjectConfig do
               'appcode-dummy-sync' => {
                 'src' => './app',
                 'dest' => '/var/www',
-                'sync_strategy' => 'unison',
+                'sync_strategy' => default_sync_strategy,
                 'watch_strategy' => 'dummy'
               }
             }
@@ -90,8 +93,8 @@ describe DockerSync::ProjectConfig do
               'simplest-sync' => {
                 'src' => './app',
                 'dest' => '/var/www',
-                'sync_strategy' => 'unison',
-                'watch_strategy' => 'unison'
+                'sync_strategy' => default_sync_strategy,
+                'watch_strategy' => default_watch_strategy
               }
             }
           })
@@ -112,8 +115,8 @@ describe DockerSync::ProjectConfig do
               'simplest-sync' => {
                 'src' => './app',
                 'dest' => '/var/www',
-                'sync_strategy' => 'unison',
-                'watch_strategy' => 'unison'
+                'sync_strategy' => default_sync_strategy,
+                'watch_strategy' => default_watch_strategy
               }
             }
           })
@@ -166,8 +169,8 @@ syncs:
             'config-string-sync' => {
               'src' => './foo',
               'dest' => '/foo/bar',
-              'sync_strategy' => 'unison',
-              'watch_strategy' => 'unison'
+              'sync_strategy' => default_sync_strategy,
+              'watch_strategy' => default_watch_strategy
             }
           }
         })
@@ -187,8 +190,8 @@ syncs:
                 'src' => './app',
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder' ],
-                'sync_strategy' => 'unison',
-                'watch_strategy' => 'unison'
+                'sync_strategy' => default_sync_strategy,
+                'watch_strategy' => default_watch_strategy
               }
             }
           })
@@ -238,7 +241,15 @@ syncs:
   end
 
   describe '#unison_required?' do
-    it do use_fixture 'simplest' do is_expected.to be_unison_required end end
+    it do
+      use_fixture 'simplest' do
+        if OS.linux?
+          is_expected.not_to be_unison_required
+        else
+          is_expected.to be_unison_required
+        end
+      end
+    end
     it do use_fixture 'rsync' do is_expected.not_to be_unison_required end end
     it do use_fixture 'unison' do is_expected.to be_unison_required end end
   end
