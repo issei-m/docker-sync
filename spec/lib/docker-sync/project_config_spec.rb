@@ -11,7 +11,7 @@ describe DockerSync::ProjectConfig do
             'version' => '2',
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'simplest'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -32,7 +32,7 @@ describe DockerSync::ProjectConfig do
             },
             'syncs' => {
               'appcode-rsync-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'rsync'}/app",
                 'dest' => '/var/www',
                 'sync_host_ip' => 'localhost',
                 'sync_host_port' => 10872,
@@ -53,7 +53,7 @@ describe DockerSync::ProjectConfig do
             },
             'syncs' => {
               'appcode-unison-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'unison'}/app",
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder'],
                 'sync_strategy' => 'unison',
@@ -70,7 +70,7 @@ describe DockerSync::ProjectConfig do
             'version' => '2',
             'syncs' => {
               'appcode-dummy-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'dummy'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'dummy'
@@ -88,7 +88,7 @@ describe DockerSync::ProjectConfig do
             'version' => '2',
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'simplest'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -110,7 +110,7 @@ describe DockerSync::ProjectConfig do
             'version' => '2',
             'syncs' => {
               'simplest-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'simplest'}/app",
                 'dest' => '/var/www',
                 'sync_strategy' => 'unison',
                 'watch_strategy' => 'unison'
@@ -164,7 +164,7 @@ syncs:
           'version' => '2',
           'syncs' => {
             'config-string-sync' => {
-              'src' => './foo',
+              'src' => "#{Dir.pwd}/foo",
               'dest' => '/foo/bar',
               'sync_strategy' => 'unison',
               'watch_strategy' => 'unison'
@@ -184,7 +184,7 @@ syncs:
             },
             'syncs' => {
               'docker-boilerplate-unison-sync' => {
-                'src' => './app',
+                'src' => "#{fixture_path 'dynamic-configuration-dotenv'}/app",
                 'dest' => '/var/www',
                 'sync_excludes' => ['ignored_folder', '.ignored_dot_folder' ],
                 'sync_strategy' => 'unison',

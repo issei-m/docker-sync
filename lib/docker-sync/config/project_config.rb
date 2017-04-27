@@ -99,7 +99,9 @@ module DockerSync
         {
           'sync_strategy' => sync_strategy_for(sync_config),
           'watch_strategy' => watch_strategy_for(sync_config)
-        }.merge(sync_config)
+        }.merge(sync_config).merge(
+          'src' => expand_path_relative_to_config_path(sync_config['src']),
+        )
       end
 
       def sync_strategy_for(sync_config)
@@ -121,6 +123,22 @@ module DockerSync
         else
           'unison'
         end
+      end
+
+      def expand_path_relative_to_config_path(path)
+        if @config_path.nil? || @config_path.empty?
+          expand_path(path)
+        else
+          Dir.chdir(File.dirname @config_path) { expand_path(path) }
+        end
+      end
+
+      def expand_path(path)
+        # [nbr] convert the sync src from relative to absolute path
+        # preserve '/' as it may be significant to the sync cmd
+        absolute_path = File.expand_path(path)
+        absolute_path << "/" if path.end_with?("/")
+        absolute_path
       end
 
   end
